@@ -6,8 +6,8 @@ from typing import Optional
 @dataclass
 class WeatherForecast:
     source: str # Data source name
-    request_datetime: datetime # Date and time of a request
-    forecast_datetime: datetime # Date and time of a forecast
+    request_datetime: datetime # Date and time of a request (UTC)
+    forecast_datetime: datetime # Date and time of a forecast (UTC)
 
     temperature: Optional[float] = None # Air temperature (Celsius)
     min_temperature: Optional[float] = None # Minimal air temperature (Celsius)

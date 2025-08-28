@@ -5,7 +5,7 @@ import requests
 from requests import Response
 
 from app.model import WeatherForecast
-from app.utils import mps_to_kmph
+from app.utils import mps_to_kmph, convert_local_datetime_to_utc, get_utc_time_without_offset
 
 
 def fetch_wttr_forecast(latitude: float, longitude: float) -> list[WeatherForecast]:
@@ -14,20 +14,20 @@ def fetch_wttr_forecast(latitude: float, longitude: float) -> list[WeatherForeca
     response.raise_for_status()
 
     days: list = response.json()["weather"]
-    request_datetime=datetime.now()
+    request_datetime = get_utc_time_without_offset()
 
     result: list[WeatherForecast] = []
 
     for day in days:
         for hour in day["hourly"]:
-            forecast_datetime: datetime = datetime.strptime(
-                f"{day['date']} {hour['time'].zfill(4)}", "%Y-%m-%d %H%M"
-            )
+            forecast_datetime: str = f"{day['date']} {hour['time'].zfill(4)}"
+
+            forecast_datetime_utc = convert_local_datetime_to_utc(latitude, longitude, forecast_datetime)
 
             weather_forecast: WeatherForecast = WeatherForecast(
                 source="wttr",
                 request_datetime=request_datetime,
-                forecast_datetime=forecast_datetime,
+                forecast_datetime=forecast_datetime_utc,
                 temperature=float(hour["tempC"]),
                 wind_speed=float(hour["windspeedKmph"]),
                 wind_direction=float(hour["winddirDegree"]),
@@ -48,14 +48,14 @@ def fetch_open_meteo_forecast(latitude: float, longitude: float) -> list[Weather
         "longitude": longitude,
         "hourly": "temperature_2m,precipitation,relative_humidity_2m,windspeed_10m,winddirection_10m,cloudcover,surface_pressure,dew_point_2m",
         "forecast_days": 7,
-        "timezone": "auto"
+        "timezone": "UTC"
     }
     response: Response = requests.get(url, params=parameters)
     response.raise_for_status()
 
     data: dict[str, Any] = response.json()["hourly"]
     times: dict[str, Any] = data["time"]
-    request_datetime = datetime.now()
+    request_datetime = get_utc_time_without_offset()
 
     result: list[WeatherForecast] = []
 
@@ -92,12 +92,12 @@ def fetch_met_no_forecast(latitude: float, longitude: float) -> list[WeatherFore
     response.raise_for_status()
 
     data: list = response.json()["properties"]["timeseries"]
-    request_datetime = datetime.now()
+    request_datetime = get_utc_time_without_offset()
 
     result: list[WeatherForecast] = []
 
     for entry in data:
-        forecast_datetime: datetime = datetime.fromisoformat(entry["time"])
+        forecast_datetime: datetime = datetime.fromisoformat(entry["time"]).replace(tzinfo=None)
         details = entry["data"]["instant"]["details"]
 
         precipitation = None
