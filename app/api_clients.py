@@ -5,7 +5,7 @@ import requests
 from requests import Response
 
 from app.model import WeatherForecast
-from app.utils import mps_to_kmph, convert_local_datetime_to_utc, get_utc_time_without_offset
+from app.utils import mps_to_kmph, convert_local_datetime_to_utc, get_utc_time_without_offset, km_to_m
 
 
 def fetch_wttr_forecast(latitude: float, longitude: float) -> list[WeatherForecast]:
@@ -33,7 +33,8 @@ def fetch_wttr_forecast(latitude: float, longitude: float) -> list[WeatherForeca
                 wind_direction=float(hour["winddirDegree"]),
                 precipitation=float(hour["precipMM"]),
                 humidity=float(hour["humidity"]),
-                air_pressure=float(hour["pressure"])
+                air_pressure=float(hour["pressure"]),
+                visibility=km_to_m(float(hour["visibility"]))
             )
 
             result.append(weather_forecast)
@@ -46,7 +47,7 @@ def fetch_open_meteo_forecast(latitude: float, longitude: float) -> list[Weather
     parameters: dict[str, Any] = {
         "latitude": latitude,
         "longitude": longitude,
-        "hourly": "temperature_2m,precipitation,relative_humidity_2m,windspeed_10m,winddirection_10m,cloudcover,surface_pressure,dew_point_2m",
+        "hourly": "temperature_2m,precipitation,relative_humidity_2m,windspeed_10m,winddirection_10m,cloudcover,surface_pressure,dew_point_2m,uv_index,visibility",
         "forecast_days": 7,
         "timezone": "UTC"
     }
@@ -71,7 +72,9 @@ def fetch_open_meteo_forecast(latitude: float, longitude: float) -> list[Weather
             humidity=data["relative_humidity_2m"][i],
             cloud_cover=data["cloudcover"][i],
             air_pressure=data["surface_pressure"][i],
-            dew_point=data["dew_point_2m"][i]
+            dew_point=data["dew_point_2m"][i],
+            uv_index=data["uv_index"][i],
+            visibility=data["visibility"][i]
         )
 
         result.append(weather_forecast)

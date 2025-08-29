@@ -12,6 +12,10 @@ def mps_to_kmph(speed_in_meters_per_second: Optional[float]) -> Optional[float]:
         return speed_in_meters_per_second * 3.6
 
 
+def km_to_m(distance_in_kilometers: float) -> float:
+    return 1000 * distance_in_kilometers
+
+
 def convert_local_datetime_to_utc(latitude: float, longitude: float, date: str) -> datetime:
     timezone_finder: TimezoneFinder = TimezoneFinder()
     timezone_name: Optional[str] = timezone_finder.timezone_at(lat=latitude, lng=longitude)
