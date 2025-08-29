@@ -10,8 +10,6 @@ class WeatherForecast:
     forecast_datetime: datetime # Date and time of a forecast (UTC)
 
     temperature: Optional[float] = None # Air temperature (Celsius)
-    min_temperature: Optional[float] = None # Minimal air temperature (Celsius)
-    max_temperature: Optional[float] = None # Maximal air temperature (Celsius)
 
     wind_speed: Optional[float] = None # Wind speed (kilometers per hour)
     wind_direction: Optional[float] = None # Wind direction (degrees, 0=N, 90=E, 180=S, 270=W)
