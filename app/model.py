@@ -9,6 +9,9 @@ class WeatherForecast:
     request_datetime: datetime # Date and time of a request (UTC)
     forecast_datetime: datetime # Date and time of a forecast (UTC)
 
+    latitude: float # Latitude of the location
+    longitude: float # Longitude of the location
+
     temperature: Optional[float] = None # Air temperature (Celsius)
 
     wind_speed: Optional[float] = None # Wind speed (kilometers per hour)
