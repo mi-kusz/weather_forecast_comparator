@@ -1,7 +1,38 @@
+from typing import Any
+
 import pandas as pd
 from datetime import datetime, date
 
 from app.utils import mean_angle
+
+
+def get_comparable_features() -> list[str]:
+    return [
+        "temperature",
+        "wind_speed",
+        "precipitation",
+        "humidity",
+        "air_pressure",
+        "cloud_cover",
+        "uv_index",
+        "dew_point",
+        "visibility"
+    ]
+
+
+def get_group_by_aggregator() -> dict[str, Any]:
+    return {
+        "temperature": "mean",
+        "wind_speed": "mean",
+        "wind_direction": lambda x: mean_angle(x),
+        "precipitation": "mean",
+        "humidity": "mean",
+        "cloud_cover": "mean",
+        "air_pressure": "mean",
+        "uv_index": "mean",
+        "dew_point": "mean",
+        "visibility": "mean",
+    }
 
 
 def filter_forecasts_by_latitude_and_longitude(dataframe: pd.DataFrame, latitude: float, longitude: float) -> pd.DataFrame:
@@ -31,18 +62,16 @@ def filter_forecasts_by_request_date(dataframe: pd.DataFrame, request_date: date
     return filtered_dataframe
 
 
+def filter_forecasts_by_forecast_date_range(dataframe: pd.DataFrame, forecast_date_start: date, forecast_date_end: date) -> pd.DataFrame:
+    filtered_dataframe: pd.DataFrame = dataframe[
+        (dataframe["request_datetime"].dt.date >= forecast_date_start) &
+        (dataframe["request_datetime"].dt.date <= forecast_date_end)
+    ]
+
+    return filtered_dataframe
+
+
 def group_forecasts(dataframe: pd.DataFrame, group_by_columns: list[str]) -> pd.DataFrame:
-    grouped_dataframe: pd.DataFrame = dataframe.groupby(group_by_columns).agg({
-        "temperature": "mean",
-        "wind_speed": "mean",
-        "wind_direction": lambda x: mean_angle(x),
-        "precipitation": "mean",
-        "humidity": "mean",
-        "cloud_cover": "mean",
-        "air_pressure": "mean",
-        "uv_index": "mean",
-        "dew_point": "mean",
-        "visibility": "mean",
-    })
+    grouped_dataframe: pd.DataFrame = dataframe.groupby(group_by_columns).agg(get_group_by_aggregator())
 
     return grouped_dataframe
