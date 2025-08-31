@@ -1,7 +1,7 @@
+from datetime import datetime, date
 from typing import Any
 
 import pandas as pd
-from datetime import datetime, date
 
 from app.utils import mean_angle
 
@@ -35,11 +35,12 @@ def get_group_by_aggregator() -> dict[str, Any]:
     }
 
 
-def filter_forecasts_by_latitude_and_longitude(dataframe: pd.DataFrame, latitude: float, longitude: float) -> pd.DataFrame:
+def filter_forecasts_by_latitude_and_longitude(dataframe: pd.DataFrame, latitude: float,
+                                               longitude: float) -> pd.DataFrame:
     filtered_dataframe: pd.DataFrame = dataframe[
         (dataframe["latitude"] == latitude) &
         (dataframe["longitude"] == longitude)
-    ]
+        ]
 
     return filtered_dataframe
 
@@ -62,11 +63,12 @@ def filter_forecasts_by_request_date(dataframe: pd.DataFrame, request_date: date
     return filtered_dataframe
 
 
-def filter_forecasts_by_forecast_date_range(dataframe: pd.DataFrame, forecast_date_start: date, forecast_date_end: date) -> pd.DataFrame:
+def filter_forecasts_by_forecast_date_range(dataframe: pd.DataFrame, forecast_date_start: date,
+                                            forecast_date_end: date) -> pd.DataFrame:
     filtered_dataframe: pd.DataFrame = dataframe[
         (dataframe["request_datetime"].dt.date >= forecast_date_start) &
         (dataframe["request_datetime"].dt.date <= forecast_date_end)
-    ]
+        ]
 
     return filtered_dataframe
 

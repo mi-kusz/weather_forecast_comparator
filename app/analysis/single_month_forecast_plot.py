@@ -7,14 +7,15 @@ from matplotlib.ticker import MaxNLocator
 from app.analysis.functions import filter_forecasts_by_latitude_and_longitude, get_comparable_features
 from app.storage import load_forecasts_into_dataframe
 
+
 def compare_forecasts_for_month(dataframe: pd.DataFrame,
-                              latitude: float,
-                              longitude: float,
-                              forecast_year: int,
-                              forecast_month: int,
-                              sources: Optional[list[str]] = None,
-                              features: Optional[list[str]] = None
-                              ) -> None:
+                                latitude: float,
+                                longitude: float,
+                                forecast_year: int,
+                                forecast_month: int,
+                                sources: Optional[list[str]] = None,
+                                features: Optional[list[str]] = None
+                                ) -> None:
     # Use all sources if none is specified
     if sources is None:
         sources = list(dataframe["source"].unique())
@@ -71,7 +72,6 @@ def compare_forecasts_for_month(dataframe: pd.DataFrame,
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax.legend()
         ax.grid()
-
 
     def on_key(event):
         nonlocal current_feature_index

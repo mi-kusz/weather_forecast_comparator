@@ -2,14 +2,15 @@ from pathlib import Path
 from typing import Union
 
 import pandas as pd
+
 from app.model import WeatherForecast
 from app.utils import float_or_none
 
 
 def save_forecasts(forecasts: Union[WeatherForecast, list[WeatherForecast]],
-                  file_path: str
-                  ) -> None:
-    if not isinstance(forecasts, list): # Convert single element to list with one element
+                   file_path: str
+                   ) -> None:
+    if not isinstance(forecasts, list):  # Convert single element to list with one element
         forecasts = [forecasts]
 
     path: Path = Path(file_path)

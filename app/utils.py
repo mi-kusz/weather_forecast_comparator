@@ -1,11 +1,10 @@
-from typing import Optional, Any
 from datetime import datetime, timezone
+from typing import Optional, Any
 
+import numpy as np
 import pandas as pd
 import pytz
 from timezonefinder import TimezoneFinder
-
-import numpy as np
 
 
 def mps_to_kmph(speed_in_meters_per_second: Optional[float]) -> Optional[float]:

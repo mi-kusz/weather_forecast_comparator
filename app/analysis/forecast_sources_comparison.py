@@ -38,7 +38,8 @@ def compare_forecast_sources(dataframe: pd.DataFrame,
     dataframe = dataframe.groupby(["source", "forecast_date"]).agg(get_group_by_aggregator())
     dataframe = dataframe.reset_index()
 
-    pivot_dataframe: pd.DataFrame = dataframe.pivot(index="forecast_date", columns="source", values=features_to_compare).sort_index()
+    pivot_dataframe: pd.DataFrame = dataframe.pivot(index="forecast_date", columns="source",
+                                                    values=features_to_compare).sort_index()
 
     source_pairs: list[tuple[str, str]] = list(combinations(sources_to_compare, 2))
     current_source_pair_index: int = 0
@@ -82,11 +83,9 @@ def compare_forecast_sources(dataframe: pd.DataFrame,
 
         plot_feature()
 
-
     fig.canvas.mpl_connect("key_press_event", on_key)
     plot_feature()
     plt.show()
-
 
 
 if __name__ == "__main__":

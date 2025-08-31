@@ -14,7 +14,8 @@ def fetch_forecasts(latitude: float,
     all_forecasts: list[WeatherForecast] = []
 
     with ThreadPoolExecutor(max_workers=len(fetch_functions)) as executor:
-        futures: list[Future] = [executor.submit(fetch_function, latitude, longitude) for fetch_function in fetch_functions]
+        futures: list[Future] = [executor.submit(fetch_function, latitude, longitude) for fetch_function in
+                                 fetch_functions]
 
         for future in as_completed(futures):
             try:

@@ -8,6 +8,7 @@ from app.analysis.functions import filter_forecasts_by_latitude_and_longitude, f
     filter_forecasts_by_request_date, group_forecasts, get_comparable_features
 from app.storage import load_forecasts_into_dataframe
 
+
 def compare_forecasts_for_day(dataframe: pd.DataFrame,
                               latitude: float,
                               longitude: float,
@@ -70,7 +71,6 @@ def compare_forecasts_for_day(dataframe: pd.DataFrame,
         ax.grid()
         fig.tight_layout()
         fig.canvas.draw_idle()
-
 
     def on_key(event):
         nonlocal current_feature_index
