@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from app.analysis.functions import filter_forecasts_by_forecast_date_range, \
-    filter_forecasts_by_latitude_and_longitude, get_group_by_aggregator
+    filter_forecasts_by_latitude_and_longitude, get_group_by_aggregator, get_comparable_features
 from app.storage import load_forecasts_into_dataframe
 
 
@@ -24,17 +24,7 @@ def compare_forecast_sources(dataframe: pd.DataFrame,
 
     # Use all features if none are specified
     if features_to_compare is None:
-        features_to_compare = [
-            "temperature",
-            "wind_speed",
-            "precipitation",
-            "humidity",
-            "air_pressure",
-            "cloud_cover",
-            "uv_index",
-            "dew_point",
-            "visibility"
-        ]
+        features_to_compare = get_comparable_features()
 
     # Filter by latitude, longitude and date range
     dataframe = filter_forecasts_by_latitude_and_longitude(dataframe, latitude, longitude)
